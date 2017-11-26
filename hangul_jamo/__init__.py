@@ -31,3 +31,16 @@ def decompose_hangul_syllable(syllable):
         VOWELS[index_of_vowel],
         TRAILING_CONSONANTS[index_of_trailing_consonant]
     )
+def decompose(text):
+    output = ''
+
+    for character in text:
+        if is_hangul_syllable(character):
+            leading_consonant, vowel, trailing_consonant = decompose_hangul_syllable(character)
+            output += leading_consonant
+            output += vowel
+            output += trailing_consonant or ''
+        else:
+            output += character
+
+    return output
