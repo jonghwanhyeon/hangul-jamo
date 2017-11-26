@@ -5,6 +5,17 @@ from .constants import *
 def is_hangul_syllable(syllable):
     index_of_syllable = ord(syllable) - BASE_OF_SYLLABLES
     return 0 <= index_of_syllable < NUMBER_OF_SYLLABLES
+
+def compose_jamo_characters(leading_consonant, vowel, trailing_consonant):
+    try:
+        index_of_leading_consonant_and_vowel = (INDEX_BY_LEADING_CONSONANT[leading_consonant] * NUMBER_OF_SYLLABLES_FOR_EACH_LEADING_CONSONANT) \
+                                               + (INDEX_BY_VOWEL[vowel] * NUMBER_OF_TRAILING_CONSONANTS)
+        index_of_syllable = index_of_leading_consonant_and_vowel + INDEX_BY_TRAILING_CONSONANT[trailing_consonant]
+    except KeyError:
+        raise ValueError('invalid `jamo_sequence`') from None
+
+    return chr(BASE_OF_SYLLABLES + index_of_syllable)
+
 def decompose_hangul_syllable(syllable):
     if not is_hangul_syllable(syllable):
         raise ValueError('`syllable` is not a hangul syllable')
