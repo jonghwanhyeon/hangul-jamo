@@ -2,7 +2,7 @@
 
 from .constants import *
 
-def is_hangul_syllable(syllable):
+def is_syllable(syllable):
     index_of_syllable = ord(syllable) - BASE_OF_SYLLABLES
     return 0 <= index_of_syllable < NUMBER_OF_SYLLABLES
 
@@ -16,8 +16,8 @@ def compose_jamo_characters(leading_consonant, vowel, trailing_consonant=None):
 
     return chr(BASE_OF_SYLLABLES + index_of_syllable)
 
-def decompose_hangul_syllable(syllable):
-    if not is_hangul_syllable(syllable):
+def decompose_syllable(syllable):
+    if not is_syllable(syllable):
         raise ValueError('`syllable` is not a hangul syllable')
 
     index_of_syllable = ord(syllable) - BASE_OF_SYLLABLES
@@ -35,8 +35,8 @@ def decompose(text):
     output = ''
 
     for character in text:
-        if is_hangul_syllable(character):
-            leading_consonant, vowel, trailing_consonant = decompose_hangul_syllable(character)
+        if is_syllable(character):
+            leading_consonant, vowel, trailing_consonant = decompose_syllable(character)
             output += leading_consonant
             output += vowel
             output += trailing_consonant or ''
