@@ -6,7 +6,7 @@ def is_hangul_syllable(syllable):
     index_of_syllable = ord(syllable) - BASE_OF_SYLLABLES
     return 0 <= index_of_syllable < NUMBER_OF_SYLLABLES
 
-def compose_jamo_characters(leading_consonant, vowel, trailing_consonant):
+def compose_jamo_characters(leading_consonant, vowel, trailing_consonant=None):
     try:
         index_of_leading_consonant_and_vowel = (INDEX_BY_LEADING_CONSONANT[leading_consonant] * NUMBER_OF_SYLLABLES_FOR_EACH_LEADING_CONSONANT) \
                                                + (INDEX_BY_VOWEL[vowel] * NUMBER_OF_TRAILING_CONSONANTS)
