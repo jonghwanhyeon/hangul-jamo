@@ -15,7 +15,7 @@ def compose_jamo_characters(leading_consonant, vowel, trailing_consonant=None):
                                                + (INDEX_BY_VOWEL[vowel] * NUMBER_OF_TRAILING_CONSONANTS)
         index_of_syllable = index_of_leading_consonant_and_vowel + INDEX_BY_TRAILING_CONSONANT[trailing_consonant]
     except KeyError:
-        raise ValueError('invalid `jamo_sequence`') from None
+        raise ValueError('given jamo character contains invalid Hangul jamo character') from None
 
     return chr(BASE_OF_SYLLABLES + index_of_syllable)
 
