@@ -21,7 +21,7 @@ def compose_jamo_characters(leading_consonant, vowel, trailing_consonant=None):
 
 def decompose_syllable(syllable):
     if not is_syllable(syllable):
-        raise ValueError('`syllable` is not a hangul syllable')
+        raise ValueError('`syllable` is not a Hangul syllable')
 
     index_of_syllable = ord(syllable) - BASE_OF_SYLLABLES
 
@@ -47,7 +47,7 @@ def compose(text):
                 output += queue.pop(0)
             elif 2 <= len(queue) <= 3:
                 try:
-                    # Case 1: `queue` contains a hangul syllable
+                    # Case 1: `queue` contains a Hangul syllable
                     # - LEADING_CONSONANT VOWEL
                     # - LEADING_CONSONANT VOWEL TRAILING_CONSONANTS
                     leading_consonant, vowel = queue[0], queue[1]
@@ -55,7 +55,7 @@ def compose(text):
 
                     output += compose_jamo_characters(leading_consonant, vowel, trailing_consonant)
                 except ValueError:
-                    # Case 2: `queue` does not contain any hangul syllables
+                    # Case 2: `queue` does not contain any Hangul syllables
                     output += ''.join(queue)
 
                 del queue[:]
@@ -69,7 +69,7 @@ def compose(text):
                     output += compose_jamo_characters(queue[0], queue[1])
                     del queue[0:2]
                 else:
-                    # Case 3: cannot compose any hangul syllables using first four itmes in `queue`
+                    # Case 3: cannot compose any Hangul syllables using first four itmes in `queue`
                     output += queue.pop(0)
 
         return output
