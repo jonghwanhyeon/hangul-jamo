@@ -9,10 +9,10 @@ A library to compose and decompose Hangul syllables using Hangul jamo characters
 
 ## Usage
     >>> import hangul_jamo
-    >>> print(hangul_jamo.decompose('안녕하세요'))
-    ㅇㅏㄴㄴㅕㅇㅎㅏㅅㅔㅇㅛ
-    >>> print(hangul_jamo.compose('ㅇㅏㄴㄴㅕㅇㅎㅏㅅㅔㅇㅛ'))
-    안녕하세요
+    >>> print(hangul_jamo.decompose('Jonghwan님, 안녕하세요!'))
+    Jonghwanㄴㅣㅁ, ㅇㅏㄴㄴㅕㅇㅎㅏㅅㅔㅇㅛ!
+    >>> print(hangul_jamo.compose('Jonghwanㄴㅣㅁ, ㅇㅏㄴㄴㅕㅇㅎㅏㅅㅔㅇㅛ!'))
+    Jonghwan님, 안녕하세요!
 
 # API
 ## hangul_jamo.is_syllable(syllable)
