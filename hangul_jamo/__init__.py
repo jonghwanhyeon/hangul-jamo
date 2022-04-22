@@ -100,7 +100,7 @@ def decompose(text: str) -> str:
             leading_consonant, vowel, trailing_consonant = decompose_syllable(character)
             output += leading_consonant
             output += vowel
-            output += trailing_consonant or ''
+            output += trailing_consonant if trailing_consonant is not None else ''
         else:
             output += character
 
