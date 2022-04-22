@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='hangul-jamo',
-    version='1.0.0',
+    version='1.0.1',
     description='A library to compose and decompose Hangul syllables using Hangul jamo characters',
     url='https://github.com/jonghwanhyeon/hangul-jamo',
     author='Jonghwan Hyeon',
