@@ -1,6 +1,6 @@
 # Reference: http://www.unicode.org/versions/Unicode8.0.0/ch03.pdf#G24646
 
-from .constants import *
+from hangul_jamo.constants import *
 
 def is_syllable(syllable):
     index_of_syllable = ord(syllable) - BASE_OF_SYLLABLES
