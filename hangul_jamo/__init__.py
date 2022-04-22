@@ -1,8 +1,10 @@
 # Reference: http://www.unicode.org/versions/Unicode8.0.0/ch03.pdf#G24646
 
-from typing import Optional, NamedTuple
+from typing import NamedTuple, Optional
 
 from hangul_jamo.constants import *
+from hangul_jamo.utils import consume, ngram
+
 
 class Syllable(NamedTuple):
     leading_consonant: str
@@ -46,49 +48,19 @@ def decompose_syllable(syllable: str) -> Syllable:
 def compose(text: str) -> str:
     output = ''
 
-    queue = []
-    def do_compose():
-        output = ''
-
-        while len(queue) > 0:
-            if len(queue) == 1:
-                output += queue.pop(0)
-            elif 2 <= len(queue) <= 3:
-                try:
-                    # Case 1: `queue` contains a Hangul syllable
-                    # - LEADING_CONSONANT VOWEL
-                    # - LEADING_CONSONANT VOWEL TRAILING_CONSONANTS
-                    leading_consonant, vowel = queue[0], queue[1]
-                    trailing_consonant = queue[2] if len(queue) == 3 else None
-
-                    output += compose_jamo_characters(leading_consonant, vowel, trailing_consonant)
-                except ValueError:
-                    # Case 2: `queue` does not contain any Hangul syllables
-                    output += ''.join(queue)
-
-                del queue[:]
-            else: # len(queue) > 4
-                if (queue[0] in LEADING_CONSONANTS) and (queue[1] in VOWELS) and (queue[2] in TRAILING_CONSONANTS) and (queue[3] in LEADING_CONSONANTS):
-                    # Case 1: LEADING_CONSONANT VOWEL TRAILING_CONSONANT LEADING_CONSONANT
-                    output += compose_jamo_characters(queue[0], queue[1], queue[2])
-                    del queue[0:3]
-                elif (queue[0] in LEADING_CONSONANTS) and (queue[1] in VOWELS) and (queue[2] in LEADING_CONSONANTS) and (queue[3] in VOWELS):
-                    # Case 2: LEADING_CONSONANT VOWEL LEADING_CONSONANT VOWEL
-                    output += compose_jamo_characters(queue[0], queue[1])
-                    del queue[0:2]
-                else:
-                    # Case 3: cannot compose any Hangul syllables using first four itmes in `queue`
-                    output += queue.pop(0)
-
-        return output
-
-    for character in text:
-        if is_jamo_character(character):
-            queue.append(character)
+    iterator = ngram(text, n=4, pad_right=True)
+    for first, second, third, fourth in iterator:
+        if (first in LEADING_CONSONANTS) and (second in VOWELS) and (third in LEADING_CONSONANTS) and (fourth in VOWELS):
+            output += compose_jamo_characters(first, second)
+            consume(iterator, 1)
+        elif (first in LEADING_CONSONANTS) and (second in VOWELS) and (third in TRAILING_CONSONANTS):
+            output += compose_jamo_characters(first, second, third)
+            consume(iterator, 2)
+        elif (first in LEADING_CONSONANTS) and (second in VOWELS):
+            output += compose_jamo_characters(first, second)
+            consume(iterator, 1)
         else:
-            output += do_compose()
-            output += character
-    output += do_compose() # to handle remaining charaters in `queue`
+            output += first
 
     return output
 
